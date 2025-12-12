@@ -1,0 +1,24 @@
+﻿@{
+    // Ana şablonumuzu (artık 'randevu-theme' verecek) kullanmasını söylüyoruz
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h1 class="page-title-with-bg">Hesabı Yönet</h1>
+    <p style="color: #555;">Hesap ayarlarınızı buradan değiştirin.</p>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-3">
+            <partial name="_ManageNav" />
+        </div>
+        <div class="col-md-9">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}

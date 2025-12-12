@@ -1,0 +1,49 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Hesap Oluştur";
+}
+
+<div class="account-container">
+    <div class="account-form-wrapper">
+
+        <h1>@ViewData["Title"]</h1>
+        <p class="subtitle">Potansiyelinize Giden İlk Adım</p>
+
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <div class="form-floating">
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="E-posta" />
+                <label asp-for="Input.Email">E-posta</label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Şifre" />
+                <label asp-for="Input.Password">Şifre</label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Şifreyi Onayla" />
+                <label asp-for="Input.ConfirmPassword">Şifreyi Onayla</label>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-account mt-3">Kayıt Ol</button>
+        </form>
+
+        <div class="mt-4">
+            <p>
+                <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Zaten bir hesabınız var mı? Giriş Yapın</a>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
