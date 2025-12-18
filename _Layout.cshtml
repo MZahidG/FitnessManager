@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SporSalonu</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/webOdev.styles.css" asp-append-version="true" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+</head>
+
+@{
+        var area = ViewContext.RouteData.Values["area"]?.ToString();
+        var page = ViewContext.RouteData.Values["page"]?.ToString();
+        var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+        var action = ViewContext.RouteData.Values["action"]?.ToString();
+
+        string bodyClass = ""; // Varsayılan
+
+        bool isHomepage = (controller == "Home" && action == "Index");
+        // DÜZELTME: Sadece "Manage" (Profil) DIŞINDAKİ Kimlik sayfaları gökyüzü teması alsın
+        bool isAccountPage = (area == "Identity" && !(page.Contains("/Account/Manage")));
+
+        if (isHomepage || isAccountPage)
+        {
+                bodyClass = "homepage"; // Gökyüzü teması (Ana Sayfa, Login, Register)
+        }
+        else if (controller == "Randevu" || controller == "YapayZeka")
+        {
+                bodyClass = "randevu-theme"; // Açık mavi tema (Randevu, AI)
+        }
+        else
+        {
+                // Geri kalan her şey (Admin VE Profilim/Manage sayfaları)
+                bodyClass = "randevu-theme"; // DÜZELTME: Admin ve Profil de açık mavi olsun
+        }
+}
+<body class="@(bodyClass)">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark mb-3">
+            <div class="container-fluid" style="max-width: 1200px;">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" style="font-weight: 700; font-size: 1.25rem;">
+                    SporSalonu
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
+                        </li>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Randevu" asp-action="Index">Randevu Al</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="YapayZeka" asp-action="OneriAl">AI Öneri Al</a>
+                            </li>
+                        }
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Antrenorler" asp-action="Index">Antrenörleri Yönet</a>
+                            </li>
+                        }
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    @if (bodyClass == "randevu-theme")
+    {
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    }
+    else
+    {
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    }
+
+    <footer class="border-top footer text-muted">
+        <div class="container" style="max-width: 1200px;">
+            &copy; 2025 - SporSalonu Projesi
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
