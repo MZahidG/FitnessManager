@@ -1,0 +1,117 @@
+﻿@using Microsoft.EntityFrameworkCore
+@model IEnumerable<webOdev.Models.DersSeans>
+@inject webOdev.Data.ApplicationDbContext _context
+
+@{
+    ViewData["Title"] = "Müsait Dersler";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="mb-5 text-center">
+        <h1 style="font-weight: 800; color: #0D2A4F; letter-spacing: -1px;">Müsait Dersler ve Aktiviteler</h1>
+        <p class="text-muted" style="font-size: 1.1rem;">Size uygun bir ders seçin ve hemen yerinizi ayırtın.</p>
+        <hr class="mx-auto" style="width: 100px; border-top: 3px solid #0D2A4F; opacity: 1;">
+    </div>
+
+    @if (TempData["Basari"] != null)
+    {
+        <div class="alert alert-success shadow-sm" style="border-left: 5px solid #198754; border-radius: 12px;">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["Basari"]
+        </div>
+    }
+    @if (TempData["Mesaj"] != null)
+    {
+        <div class="alert alert-warning shadow-sm" style="border-left: 5px solid #ffc107; border-radius: 12px;">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["Mesaj"]
+        </div>
+    }
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            // --- KONTENJAN HESAPLAMA ---
+            int doluKoltuk = _context.Randevular.Count(r => r.DersSeansId == item.Id && r.OnayDurumu == true);
+            int kapasite = item.Kapasite;
+            int kalan = kapasite - doluKoltuk;
+            bool isFull = item.DoluMu || kalan <= 0;
+            // Yüzde hesaplama (Progress Bar için)
+            int dolulukYuzdesi = (int)((double)doluKoltuk / kapasite * 100);
+            // ---------------------------
+
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="new-design-card hizmet-card h-100 d-flex flex-column" style="background-color: white; border: none; position: relative;">
+
+                    <div style="position: absolute; top: 20px; right: 20px; background-color: #0D2A4F; color: white; padding: 5px 15px; border-radius: 20px; font-weight: 700; box-shadow: 0 4px 10px rgba(13, 42, 79, 0.2);">
+                        @item.Ucret ₺
+                    </div>
+
+                    <div class="mb-3 pe-5">
+                        <h4 style="color: #0D2A4F; font-weight: 800; margin-bottom: 5px;">@item.DersAdi</h4>
+                        <h6 class="text-muted" style="font-weight: 600;">
+                            <i class="bi bi-person-circle me-1" style="color: #0D2A4F;"></i> @item.Antrenor.AdSoyad
+                        </h6>
+                    </div>
+
+                    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-calendar-event-fill me-3" style="font-size: 1.2rem; color: #0D2A4F;"></i>
+                            <div>
+                                <small class="text-muted d-block" style="font-weight: 600;">Tarih</small>
+                                <span style="color: #0D2A4F; font-weight: 600;">@item.Tarih.ToShortDateString()</span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-clock-fill me-3" style="font-size: 1.2rem; color: #0D2A4F;"></i>
+                            <div>
+                                <small class="text-muted d-block" style="font-weight: 600;">Saat Aralığı</small>
+                                <span style="color: #0D2A4F; font-weight: 600;">@item.SaatAraligi</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto">
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between text-muted mb-1" style="font-size: 0.9rem; font-weight: 600;">
+                                <span>Doluluk Durumu : </span>
+                                <span class="@(isFull ? "text-danger" : "text-success")">@doluKoltuk / @kapasite Kişi</span>
+                            </div>
+                            <div class="progress" style="height: 10px; border-radius: 5px; background-color: #e9ecef;">
+                                <div class="progress-bar @(isFull ? "bg-danger" : "bg-success")" role="progressbar"
+                                     style="width: @dolulukYuzdesi%; border-radius: 5px; transition: width 0.5s ease;"
+                                     aria-valuenow="@dolulukYuzdesi" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+
+                        <form asp-action="TalepOlustur" method="post">
+                            <input type="hidden" name="seansId" value="@item.Id" />
+
+                            @if (isFull)
+                            {
+                                <button type="button" class="btn btn-secondary w-100 py-2" style="border-radius: 12px; font-weight: 600; cursor: not-allowed;" disabled>
+                                    <i class="bi bi-x-circle-fill me-2"></i>Kontenjan Dolu
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-primary w-100 py-2" style="background-color: #0D2A4F; border: none; border-radius: 12px; font-weight: 600; box-shadow: 0 4px 10px rgba(13, 42, 79, 0.2); transition: all 0.3s ease;">
+                                    <i class="bi bi-check-circle-fill me-2"></i>Randevu Talep Et
+                                </button>
+                            }
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center mt-5 py-5" style="background-color: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+            <i class="bi bi-calendar-x" style="font-size: 4rem; color: #dee2e6;"></i>
+            <h4 class="mt-3" style="color: #0D2A4F; font-weight: 700;">Şu Anda Müsait Ders Yok</h4>
+            <p class="text-muted">Lütfen daha sonra tekrar kontrol edin veya antrenörlerimizle iletişime geçin.</p>
+        </div>
+    }
+</div>

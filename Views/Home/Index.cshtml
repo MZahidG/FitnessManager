@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<!-- 1. BÖLÜM: YAZIYI YUKARI KALDIRAN HERO BÖLÜMÜ -->
+<!-- Bu bölüm, 'site.css' dosyamızdaki '.hero-section' stillerini kullanır -->
+
+<div class="hero-section">
+    <h1>Hedeflerinize Ulaşın.<br />Sınırlarınızı Aşın.</h1>
+    <p>
+        Modern ekipmanlar, uzman antrenörler ve size özel programlar ile
+        potansiyelinizin zirvesine ulaşın.
+    </p>
+    <p>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-controller="Randevu" asp-action="Index" class="btn-hero">Randevu Al</a>
+        }
+        else
+        {
+            <!-- Bu buton, 'site.css' dosyamızdaki '.btn-hero' stilini (20px radius ile) kullanır -->
+            <a asp-area="Identity" asp-page="/Account/Register" class="btn-hero">Hemen Başla</a>
+        }
+    </p>
+</div>
+
+<!-- 2. BÖLÜM: GÖSTERMELİK 3 KİŞİ KARTI (EKSİK OLAN KISIM) -->
+<!-- Bu bölüm, 'site.css' dosyamızdaki '.homepage-feature-cards' stilini kullanarak hero'nun üzerine kayar -->
+
+<div class="homepage-feature-cards">
+
+    <div class="feature-card">
+        <!-- 'site.css' dosyamızdaki '.feature-card img' stili bu resmi yuvarlak yapar -->
+        <img src="https://placehold.co/120x120/EBF8FF/7F9CF5?text=E%C4%9Fitmen&font=raleway" alt="Uzman Eğitmenler" />
+
+        <!-- 'site.css' dosyamızdaki '.feature-card h4' stili -->
+        <h4>Ayşe Yılmaz</h4>
+
+        <!-- 'site.css' dosyamızdaki '.trainer-title' stili -->
+        <div class="trainer-title">Kardiyo & HIIT Uzmanı</div>
+
+        <p>Enerjinizi zirveye taşıyacak kardiyo programları ile tanışın.</p>
+    </div>
+
+    <div class="feature-card highlighted-card">
+        <img src="https://placehold.co/120x120/EBF8FF/7F9CF5?text=E%C4%9Fitmen&font=raleway" alt="Ağırlık Koçu" />
+        <h4>Mehmet Öztürk</h4>
+        <div class="trainer-title">Ağırlık & Güç Koçu</div>
+        <p>Size özel ağırlık programları ile gücünüzü yeniden keşfedin.</p>
+    </div>
+
+    <div class="feature-card">
+        <img src="https://placehold.co/120x120/EBF8FF/7F9CF5?text=E%C4%9Fitmen&font=raleway" alt="Yoga Eğitmeni" />
+        <h4>Zeynep Kaya</h4>
+        <div class="trainer-title">Yoga & Pilates Eğitmeni</div>
+        <p>Esneklik, denge ve zihinsel berraklık için seanslarımız sizi bekliyor.</p>
+    </div>
+
+
+</div>

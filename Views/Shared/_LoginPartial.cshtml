@@ -1,0 +1,47 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        // 1. Kullanıcının tam e-postasını al
+        var userEmail = UserManager.GetUserName(User);
+        string shortName = "Kullanıcı"; // Varsayılan bir değer ata (null olmasın)
+
+        // 2. Eğer e-posta null değilse ve @ işareti içeriyorsa...
+        if (!string.IsNullOrEmpty(userEmail) && userEmail.Contains("@"))
+        {
+            // 3. E-postayı @ işaretinden böl ve ilk parçayı al
+            shortName = userEmail.Split('@')[0];
+
+            // 4. (Ekstra) İlk harfi büyüt
+            shortName = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(shortName);
+        }
+        else if (!string.IsNullOrEmpty(userEmail))
+        {
+            // Eğer @ işareti yoksa, e-postanın tamamını (null değilse) kullan
+            shortName = userEmail;
+        }
+        // else durumunda (e-posta null ise) isim "Kullanıcı" olarak kalacak
+
+        <li class="nav-item">
+            <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @shortName!</a>
+        </li>
+        <li class="nav-item">
+            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
+</ul>
