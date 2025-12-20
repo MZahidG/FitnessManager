@@ -1,4 +1,4 @@
-# FitnessManager
+# 🏋️ Fitness Manager - Spor Salonu Yönetim Sistemi
 ASP.NET Core MVC kullanarak geliştirilen, Spor Salonu Yönetimi, Randevu Sistemi ve Yapay Zeka tabanlı egzersiz/diyet önerileri sunan web projesi.
 
 # 🏋️‍♂️ Spor Salonu Yönetim ve Randevu Sistemi (AI-Powered Fitness Center Management)
@@ -36,6 +36,7 @@ Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları takip ed
 3.  Veritabanı bağlantı ayarlarını `appsettings.json` dosyasında güncelleyin.
 4.  Entity Framework Core Migration'ları uygulayın.
 5.  Projeyi çalıştırın (F5 veya Ctrl+F5).
+
 
 ---
 
