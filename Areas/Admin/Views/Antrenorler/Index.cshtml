@@ -1,0 +1,33 @@
+﻿@model IEnumerable<webOdev.Models.Antrenor>
+
+@{
+    ViewData["Title"] = "Antrenörleri Yönet";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 style="font-weight: 700; color: #0D2A4F;">@ViewData["Title"]</h1>
+    <a asp-action="Create" class="btn btn-primary btn-lg" style="background-color: #0D2A4F; border:none; font-weight: 600;">Yeni Antrenör Oluştur</a>
+</div>
+
+<div class="card-row" style="grid-template-columns: 1fr 1fr 1fr;">
+
+    @foreach (var item in Model)
+    {
+        <div class="new-design-card antrenor-card">
+
+            <img src="https://placehold.co/80x80/D4EEFF/0D2A4F?text=@(item.AdSoyad.Substring(0, 1))" alt="@item.AdSoyad" />
+
+            <h4 style="font-size: 1.5rem;">@Html.DisplayFor(modelItem => item.AdSoyad)</h4>
+            <p style="font-size: 1rem; color: #555;">
+                @Html.DisplayFor(modelItem => item.UzmanlikAlani)
+            </p>
+
+            <div style="margin-top: 20px; border-top: 1px solid #ddd; padding-top: 15px; width: 100%;">
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id" style="color: #dc3545;">Delete</a>
+            </div>
+        </div>
+    }
+
+</div>

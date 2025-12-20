@@ -1,0 +1,22 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Kayıt Onayı";
+}
+
+<div class="account-container">
+    <div class="account-form-wrapper">
+        <h2>@ViewData["Title"]</h2>
+        <p class="subtitle">
+            Lütfen e-postanızı kontrol ederek hesabınızı doğrulayın.
+        </p>
+
+        @if (Model.DisplayConfirmAccountLink)
+        {
+            <p>
+                (Bu bir demo uygulamasıdır. Normalde bu link size e-posta ile gönderilir.)<br />
+                <a id="confirm-link" href="@Model.EmailConfirmationUrl">Hesabınızı doğrulamak için buraya tıklayın</a>
+            </p>
+        }
+    </div>
+</div>
